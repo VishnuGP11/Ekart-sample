@@ -1,0 +1,24 @@
+spring.application.name: CheckoutMS
+
+management:
+  health:
+    circuitbreakers:
+      enabled: true
+    show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics,circuitbreakers
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      CheckoutMS:
+        registerHealthIndicator: true
+        slidingWindowSize: 2
+        minimumNumberOfCalls: 2
+        failureRateThreshold: 50
+        waitDurationInOpenState: 5000ms
+        permittedNumberOfCallsInHalfOpenState: 3
+        eventConsumerBufferSize: 10
+        automaticTransitionFromOpenToHalfOpenEnabled: true
